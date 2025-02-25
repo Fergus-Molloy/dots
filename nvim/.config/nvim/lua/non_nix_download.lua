@@ -87,15 +87,15 @@ require("nixCatsUtils.catPacker").setup({
 	{ "justinmk/vim-sneak" },
 	{ "ibhagwan/fzf-lua" },
 	{ "sindrets/diffview.nvim" },
-	{ "tpop/vim-fugitive" },
+    -- { "tpop/vim-fugitive" },
 	{ "samharju/yeet.nvim" },
 	{ "abecodes/tabout.nvim" },
-	{
-		"folke/noice.nvim",
-		requires = {
-			"MunifTannjim/nui.nvim",
-		},
-	},
+	-- {
+	-- 	"folke/noice.nvim",
+	-- 	requires = {
+	-- 		"MunifTannjim/nui.nvim",
+	-- 	},
+	-- },
 
 	{
 		"nvim-neotest/neotest",
