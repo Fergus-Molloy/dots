@@ -1,0 +1,13 @@
+diff --git a/colors/melange.lua b/colors/melange.lua
+index ba27564..7ff5a9d 100644
+--- a/colors/melange.lua
++++ b/colors/melange.lua
+@@ -190,6 +190,7 @@ for name, attrs in pairs {
+   --- NOTE: Queries for these highlight groups are really hacky.
+   --- Inaccurate syntax highlighting is worse than no highlighting at all,
+   ['@constant'] = 'Identifier',
++  ['@constant.erlang'] = 'String',
+   ['@constant.builtin'] = 'Constant',
+   ['@constant.macro'] = 'Constant',
+   ['@module'] = 'Identifier',
+

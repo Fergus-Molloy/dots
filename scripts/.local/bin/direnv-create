@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+if [ $# -gt 1 ]; then
+	echo "only supply the name of the shell you want to use"
+	exit 1;
+fi
+
+if [ $# -eq 1 ]; then
+  echo "use flake ~/.flake/shells#$1" > .envrc && direnv allow
+else
+  echo "using local flake"
+  echo "use flake" > .envrc && direnv allow
+fi
+
+if [ -d "$PWD/.git" ]; then
+	echo "git dir detected..."
+    grep -q ".direnv" .git/info/exclude
+    if [ $? -ne 0 ]; then
+	    echo "adding .direnv to exclude"
+	    echo ".direnv" >> .git/info/exclude
+    fi
+    grep -q ".envrc" .git/info/exclude
+    if [ $? -ne 0 ]; then
+	    echo "adding .envrc to exclude"
+	    echo ".envrc" >> .git/info/exclude
+    fi
+fi
