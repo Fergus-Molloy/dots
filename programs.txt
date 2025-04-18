@@ -1,0 +1,10 @@
+fd
+fzf
+eza
+ripgrep
+fastfetch
+starship
+kitty
+nerd-fonts
+neovim
+tmux

@@ -13,6 +13,7 @@ HISTIGNORE='eza:ls:pwd:clear:history'
 # enable completion
 if [ -f /etc/bash_completion ]; then
   source /etc/bash_completion
+  if [ ! -a ~/.inputrc ]; then echo '$include /etc/inputrc' > ~/.inputrc; fi
 fi
 
 # Session Vars
@@ -22,12 +23,6 @@ export EDITOR="nvim"
 export TERM="xterm-kitty"
 export GPG_TTY="$(tty)"
 
-# autoload -U promptinit; promptinit
-# autoload -U compinit && compinit
-
-# zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
-# zstyle ':completion:*' list-colors "$\{(s.:.)LS_COLORS}"
-# zstyle ':completion:*' menu no
 
 if [ -n $(tmux has-session -t dev 2&> /dev/null) ]; then
   tmux start-server
@@ -70,9 +65,31 @@ alias gprc="gh pr create"
 alias gd="git diff -w"
 alias gD="git diff --staged -w"
 
+
+which starship 2>&1 > /dev/null
+if [ "$?" -ne "0" ]; then
+	. ~/.git-prompt.sh
+	PROMPT_COMMAND='PS1_CMD1=$(__git_ps1 " (%s)"); PS1_CMD2=$()'; PS1='\e[34m\W\e[0m\e[32m${PS1_CMD1}\e[0m\n> ${PS1_CMD2}'
+	export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
+else
+	eval "$(starship init bash)"
+fi
+
 which fastfetch 2>&1 > /dev/null && fastfetch
 
-. ~/.git-prompt.sh
-
-PROMPT_COMMAND='PS1_CMD1=$(__git_ps1 " (%s)"); PS1_CMD2=$()'; PS1='\e[34m\W\e[0m\e[32m${PS1_CMD1}\e[0m\n> ${PS1_CMD2}'
-export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
+# automatically launch tmux
+if [ -z "$TMUX" ]; then
+	tmux list-session | grep "^dev" | grep -v "attached"
+	if [ "$?" = "0" ]; then
+		# if dev session exists and is not attached
+		tmux attach -t dev
+	else
+		# otherwise create a new session (try to create dev if it doesn't exist)
+		tmux list-session | grep "^dev"
+		if [ "$?" = "0" ]; then
+			tmux new-session
+		else 
+			tmux new-session -s dev
+		fi
+	fi
+fi
